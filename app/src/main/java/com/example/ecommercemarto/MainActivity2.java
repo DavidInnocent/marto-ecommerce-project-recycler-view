@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -58,16 +59,8 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void initCategoryList() {
-
-
-
-
-
         DatabaseReference reference = database.getReference("Category");
         ArrayList<CategoryDomain> list = new ArrayList<>();
-        list.add(new CategoryDomain("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV8jDeR8_JWiDCtdwH3Ke39AiBsq1RZL6drQ&s","Vegetable",1));
-        list.add(new CategoryDomain("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV8jDeR8_JWiDCtdwH3Ke39AiBsq1RZL6drQ&s","Kale",2));
-        list.add(new CategoryDomain("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV8jDeR8_JWiDCtdwH3Ke39AiBsq1RZL6drQ&s","Sukuma",3));
         binding.progressBarCategory.setVisibility(View.VISIBLE);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -176,24 +169,23 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void initLocation() {
+        Spinner recyclerView = findViewById(R.id.locationSp);
         DatabaseReference reference = database.getReference("Location");
-        ArrayList<LocationDomain> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
 
-//        list.add(new LocationDomain(1,"Nairobi"));
-//        list.add(new LocationDomain(2,"Mombasa"));
-//        list.add(new LocationDomain(3,"Kisumu"));
-//        list.add(new LocationDomain(4,"Eldoret"));
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                        list.add(dataSnapshot.getValue(LocationDomain.class));
+                        LocationDomain value = dataSnapshot.getValue(LocationDomain.class);
+                        assert value != null;
+                        Log.d("TAG", "onDataChange: VALUE"+value.getLoc());
+                        list.add(value.getLoc());
                     }
-                    ArrayAdapter<LocationDomain> adapter = new ArrayAdapter<>(MainActivity2.this, R.layout.sp_items, list);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity2.this, R.layout.sp_items, list);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.locationSp.setAdapter(adapter);
+                    recyclerView.setAdapter(adapter);
                 }
             }
 
