@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "760382349651",
+    "firebase_url": "https://test-6bea2.firebaseio.com",
+    "project_id": "test-6bea2",
+    "storage_bucket": "test-6bea2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760382349651:android:7253456324ac20261741a6",
+        "android_client_info": {
+          "package_name": "com.example.ecommercemarto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760382349651-5m5ls0v9fhqi46bt7laj6d6alo5ap3m7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6Dl0R6wEJDFc6glBteo6Dw0iCNM8rOZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760382349651-5m5ls0v9fhqi46bt7laj6d6alo5ap3m7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

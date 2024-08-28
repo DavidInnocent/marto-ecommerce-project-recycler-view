@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">EcommerceMarto</string>
+    <string name="intro_title">Lets Find the<font color="#F3C024"> Best And &amp; Healthy</font> Grocery</string>
+    <string name="intro_login">Already have an account?<font color="#F3C024"> SignIn</font></string>
+</resources>
