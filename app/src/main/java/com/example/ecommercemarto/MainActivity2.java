@@ -12,11 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.ecommercemarto.Adapter.BestDealAdapter;
 import com.example.ecommercemarto.Adapter.CategoryAdapter;
+import com.example.ecommercemarto.Domain.BestDealDomain;
 import com.example.ecommercemarto.Domain.CategoryDomain;
 import com.example.ecommercemarto.Domain.LocationDomain;
 import com.example.ecommercemarto.databinding.ActivityMain2Binding;
@@ -34,10 +37,10 @@ public class MainActivity2 extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     ActivityMain2Binding binding;
-
-    private RecyclerView recyclerView;
     private CategoryAdapter adapter;
+    private BestDealAdapter bestDealAdapter;
     private ArrayList<CategoryDomain> categoryList;
+    private ArrayList<BestDealDomain> bestDealDomainArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,24 +57,37 @@ public class MainActivity2 extends AppCompatActivity {
         });
         initLocation();
         initCategoryListInnocent();
+        initBestDealList();
 
 
     }
 
-    private void initCategoryList() {
-        DatabaseReference reference = database.getReference("Category");
-        ArrayList<CategoryDomain> list = new ArrayList<>();
+    private void initBestDealList() {
+        DatabaseReference reference = database.getReference("Items");
+
+        RecyclerView recyclerView= findViewById(R.id.bestDealView);
+
+        // Initialize the list
+        bestDealDomainArrayList = new ArrayList<>();
+
+        // Set the adapter
+        bestDealAdapter = new BestDealAdapter(bestDealDomainArrayList);
+        recyclerView.setAdapter(bestDealAdapter);
+
         binding.progressBarCategory.setVisibility(View.VISIBLE);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        list.add(dataSnapshot.getValue(CategoryDomain.class));
+                        bestDealDomainArrayList.add(dataSnapshot.getValue(BestDealDomain.class));
                     }
-                    if (!list.isEmpty()) {
-                        binding.catView.setLayoutManager(new LinearLayoutManager(MainActivity2.this, LinearLayoutManager.HORIZONTAL, false));
-                        binding.catView.setAdapter(new CategoryAdapter(list));
+                    if (!bestDealDomainArrayList.isEmpty()) {
+                        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity2.this, 2));
+                        recyclerView.setAdapter(new BestDealAdapter(bestDealDomainArrayList));
+                        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.recycler_view_item_spacing); // Define spacing in dimens.xml
+                        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels));
+
                     }
                     binding.progressBarCategory.setVisibility(View.GONE);
 
@@ -79,17 +95,20 @@ public class MainActivity2 extends AppCompatActivity {
                 }
                 if (snapshot.exists()) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        CategoryDomain category = dataSnapshot.getValue(CategoryDomain.class);
+                        BestDealDomain category = dataSnapshot.getValue(BestDealDomain.class);
                         if (category != null) {
-                            list.add(category);
+                            bestDealDomainArrayList.add(category);
                         } else {
                             // Log if the category is null
                             Log.e("MainActivity2", "Null CategoryDomain object in snapshot: " + dataSnapshot.toString());
                         }
                     }
-                    if (!list.isEmpty()) {
-                        binding.catView.setLayoutManager(new LinearLayoutManager(MainActivity2.this, LinearLayoutManager.HORIZONTAL, false));
-                        binding.catView.setAdapter(new CategoryAdapter(list));
+                    if (!bestDealDomainArrayList.isEmpty()) {
+                        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity2.this, 2));
+                        recyclerView.setAdapter(new BestDealAdapter(bestDealDomainArrayList));
+                        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.recycler_view_item_spacing); // Define spacing in dimens.xml
+                        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels));
+
                     } else {
                         Log.e("MainActivity2", "Category list is empty.");
                     }
@@ -109,7 +128,7 @@ public class MainActivity2 extends AppCompatActivity {
     private void initCategoryListInnocent() {
 
         DatabaseReference reference = database.getReference("Category");
-        recyclerView = findViewById(R.id.catView);
+        RecyclerView recyclerView = findViewById(R.id.catView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
 
